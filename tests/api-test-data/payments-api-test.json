@@ -1,0 +1,373 @@
+{
+  "name": "Payment API Test Collection",
+  "description": "Test data for Payment API endpoints with realistic scenarios",
+  "test_appointments": {
+    "123": {
+      "id": 123,
+      "patient_name": "John Doe",
+      "appointment_date": "2025-09-15",
+      "total_amount": 75.50,
+      "currency": "USD",
+      "status": "confirmed"
+    },
+    "124": {
+      "id": 124,
+      "patient_name": "Jane Smith", 
+      "appointment_date": "2025-09-16",
+      "total_amount": 150.00,
+      "currency": "USD",
+      "status": "confirmed"
+    },
+    "125": {
+      "id": 125,
+      "patient_name": "Bob Johnson",
+      "appointment_date": "2025-09-17",
+      "total_amount": 80.00,
+      "currency": "USD",
+      "status": "pending"
+    }
+  },
+  "test_scenarios": {
+    "successful_credit_card": {
+      "description": "Successful credit card payment",
+      "card_number": "4111111111111111",
+      "expected_result": "success"
+    },
+    "declined_credit_card": {
+      "description": "Credit card declined by issuer",
+      "card_number": "4000000000000002",
+      "expected_result": "declined"
+    },
+    "insufficient_funds": {
+      "description": "Credit card with insufficient funds",
+      "card_number": "4000000000000127",
+      "expected_result": "insufficient_funds"
+    },
+    "successful_paypal": {
+      "description": "Successful PayPal payment",
+      "email": "user@example.com",
+      "expected_result": "success"
+    },
+    "declined_paypal": {
+      "description": "PayPal payment declined",
+      "email": "declined@example.com",
+      "expected_result": "declined"
+    },
+    "invalid_bank_account": {
+      "description": "Bank transfer with invalid account",
+      "account_number": "1234567890",
+      "expected_result": "invalid_account"
+    }
+  },
+  "endpoints": {
+    "process_payment_credit_card_success": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 123,
+        "payment_method": "credit_card",
+        "amount": 75.50,
+        "payment_details": {
+          "card_number": "4111111111111111",
+          "expiry_date": "12/26",
+          "cvv": "123",
+          "cardholder_name": "John Doe"
+        }
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "payment_id": "numeric",
+          "transaction_id": "string",
+          "status": "completed",
+          "amount": 75.50,
+          "currency": "USD",
+          "payment_method": "credit_card",
+          "processed_at": "ISO_DATE",
+          "details": {
+            "card_last_four": "1111",
+            "card_type": "visa",
+            "authorization_code": "AUTH_*",
+            "processor_response": "APPROVED"
+          }
+        },
+        "message": "Payment processed successfully"
+      }
+    },
+    "process_payment_credit_card_declined": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 123,
+        "payment_method": "credit_card",
+        "payment_details": {
+          "card_number": "4000000000000002",
+          "expiry_date": "12/26",
+          "cvv": "123",
+          "cardholder_name": "John Doe"
+        }
+      },
+      "expected_response": {
+        "success": false,
+        "message": "Card declined by issuer",
+        "data": {
+          "payment_id": "numeric",
+          "status": "failed",
+          "error_code": "CARD_DECLINED"
+        }
+      }
+    },
+    "process_payment_paypal_success": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 124,
+        "payment_method": "paypal",
+        "payment_details": {
+          "email": "user@example.com"
+        }
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "payment_id": "numeric",
+          "transaction_id": "string",
+          "status": "completed",
+          "amount": 150.00,
+          "currency": "USD",
+          "payment_method": "paypal",
+          "processed_at": "ISO_DATE",
+          "details": {
+            "paypal_email": "user@example.com",
+            "paypal_transaction_id": "PP_*",
+            "payer_status": "VERIFIED"
+          }
+        },
+        "message": "Payment processed successfully"
+      }
+    },
+    "process_payment_paypal_declined": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 124,
+        "payment_method": "paypal",
+        "payment_details": {
+          "email": "declined@example.com"
+        }
+      },
+      "expected_response": {
+        "success": false,
+        "message": "PayPal payment declined",
+        "data": {
+          "payment_id": "numeric",
+          "status": "failed",
+          "error_code": "PAYPAL_DECLINED"
+        }
+      }
+    },
+    "process_payment_bank_transfer_success": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 125,
+        "payment_method": "bank_transfer",
+        "payment_details": {
+          "account_number": "9876543210",
+          "routing_number": "021000021",
+          "account_holder_name": "Bob Johnson"
+        }
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "payment_id": "numeric",
+          "transaction_id": "string",
+          "status": "completed",
+          "amount": 80.00,
+          "currency": "USD",
+          "payment_method": "bank_transfer",
+          "processed_at": "ISO_DATE",
+          "details": {
+            "account_last_four": "3210",
+            "bank_reference": "BT_*",
+            "processing_time": "1-3 business days",
+            "status": "PENDING_VERIFICATION"
+          }
+        },
+        "message": "Bank transfer initiated successfully"
+      }
+    },
+    "process_payment_bank_transfer_invalid": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 125,
+        "payment_method": "bank_transfer",
+        "payment_details": {
+          "account_number": "1234567890",
+          "routing_number": "021000021",
+          "account_holder_name": "Bob Johnson"
+        }
+      },
+      "expected_response": {
+        "success": false,
+        "message": "Invalid account number",
+        "data": {
+          "payment_id": "numeric",
+          "status": "failed",
+          "error_code": "INVALID_ACCOUNT"
+        }
+      }
+    },
+    "process_payment_missing_fields": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 123,
+        "payment_method": "credit_card",
+        "payment_details": {
+          "card_number": "4111111111111111"
+        }
+      },
+      "expected_response": {
+        "success": false,
+        "message": "Missing required field: expiry_date",
+        "data": {
+          "payment_id": "numeric",
+          "status": "failed",
+          "error_code": "MISSING_FIELD"
+        }
+      }
+    },
+    "process_payment_invalid_appointment": {
+      "method": "POST",
+      "url": "/api/v1/payments/process",
+      "headers": {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "appointment_id": 999,
+        "payment_method": "credit_card",
+        "payment_details": {
+          "card_number": "4111111111111111",
+          "expiry_date": "12/26",
+          "cvv": "123",
+          "cardholder_name": "John Doe"
+        }
+      },
+      "expected_response": {
+        "success": false,
+        "message": "Appointment not found"
+      }
+    },
+    "get_all_payments": {
+      "method": "GET",
+      "url": "/api/v1/payments",
+      "headers": {
+        "Accept": "application/json"
+      },
+      "expected_response": {
+        "success": true,
+        "data": [
+          {
+            "id": 1,
+            "appointment_id": 123,
+            "user_id": 1,
+            "user_name": "John Doe",
+            "amount": 75.50,
+            "currency": "USD",
+            "payment_method": "credit_card",
+            "payment_status": "completed",
+            "transaction_id": "txn_abc123",
+            "created_at": "2025-09-08T10:00:00Z",
+            "updated_at": "2025-09-08T10:05:00Z"
+          }
+        ],
+        "message": "Payments retrieved successfully"
+      }
+    },
+    "get_single_payment": {
+      "method": "GET",
+      "url": "/api/v1/payments/1",
+      "headers": {
+        "Accept": "application/json"
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "id": 1,
+          "appointment_id": 123,
+          "user_id": 1,
+          "user_name": "John Doe",
+          "amount": 75.50,
+          "currency": "USD",
+          "payment_method": "credit_card",
+          "payment_status": "completed",
+          "transaction_id": "txn_abc123",
+          "payment_details": "JSON_OBJECT",
+          "created_at": "2025-09-08T10:00:00Z",
+          "updated_at": "2025-09-08T10:05:00Z"
+        },
+        "message": "Payment retrieved successfully"
+      }
+    },
+    "get_payment_methods": {
+      "method": "GET",
+      "url": "/api/v1/payments/methods",
+      "headers": {
+        "Accept": "application/json"
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "credit_card": {
+            "name": "Credit Card",
+            "description": "Pay with Visa, MasterCard, or American Express",
+            "required_fields": ["card_number", "expiry_date", "cvv", "cardholder_name"]
+          },
+          "paypal": {
+            "name": "PayPal",
+            "description": "Pay securely with PayPal",
+            "required_fields": ["email"]
+          },
+          "bank_transfer": {
+            "name": "Bank Transfer",
+            "description": "Direct bank transfer",
+            "required_fields": ["account_number", "routing_number", "account_holder_name"]
+          }
+        },
+        "message": "Payment methods retrieved successfully"
+      }
+    }
+  }
+}
