@@ -149,6 +149,16 @@ class ReorderRequestController extends Controller
                 'quantity' => $newQuantity
             ]);
             
+            // Auto-resolve related stock alerts if stock is now above reorder level
+            if ($newQuantity > $product->reorder_level) {
+                \App\Models\StockAlert::where('product_id', $product->product_id)
+                    ->whereIn('status', ['active', 'acknowledged'])
+                    ->update([
+                        'status' => 'resolved',
+                        'resolved_at' => now()
+                    ]);
+            }
+            
             // Log the inventory update
             \Log::info("Product inventory updated", [
                 'product_id' => $product->product_id,

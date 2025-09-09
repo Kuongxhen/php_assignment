@@ -10,6 +10,9 @@
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     @if (file_exists(public_path('build/manifest.json')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
@@ -17,102 +20,150 @@
     
     <!-- Custom Navigation Styles -->
     <style>
-        /* Navbar transparency and glassmorphism effect */
+        :root {
+            --primary-blue: #0ea5e9;
+            --secondary-blue: #06b6d4;
+            --accent-teal: #14b8a6;
+            --light-gray: #f8fafc;
+            --medium-gray: #e2e8f0;
+            --dark-text: #1e293b;
+            --soft-shadow: 0 4px 20px rgba(14, 165, 233, 0.1);
+        }
+        
+        /* Navbar transparency and modern medical theme */
         .navbar {
             position: sticky;
             top: 0;
             z-index: 1030;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            border: none;
         }
         
         .navbar.scrolled {
-            background: rgba(33, 37, 41, 0.98) !important;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(14, 165, 233, 0.15);
         }
         
         body {
-            background-color: var(--bs-gray-50);
-            transition: background-color 0.3s ease;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--dark-text);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            transition: all 0.3s ease;
         }
         
         .navbar-brand {
             font-weight: 600;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
+            color: var(--primary-blue) !important;
         }
         
         .navbar-nav .nav-link {
             font-weight: 500;
             padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
+            border-radius: 0.5rem;
             margin: 0 0.25rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            color: var(--dark-text) !important;
+            position: relative;
         }
         
         .navbar-nav .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white !important;
             transform: translateY(-1px);
+            box-shadow: var(--soft-shadow);
         }
         
         .navbar-nav .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.15);
-            color: #fff !important;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-teal));
+            color: white !important;
+            box-shadow: var(--soft-shadow);
         }
         
         .dropdown-menu {
             border: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border-radius: 0.75rem;
-            padding: 0.75rem 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.15);
+            border-radius: 1rem;
+            padding: 1rem 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(14, 165, 233, 0.1);
+            margin-top: 0.5rem;
         }
         
         .dropdown-item {
-            padding: 0.5rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            margin: 0.125rem 0.5rem;
+            color: var(--dark-text);
         }
         
         .dropdown-item:hover {
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
             transform: translateX(5px);
         }
         
         .dropdown-header {
             font-weight: 600;
-            color: #6c757d;
-            padding: 0.5rem 1.5rem 0.25rem;
-            font-size: 0.75rem;
+            color: var(--primary-blue);
+            padding: 0.75rem 1.5rem 0.5rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
         
         .badge {
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+        }
+        
+        .badge.bg-success {
+            background: linear-gradient(135deg, var(--accent-teal), var(--secondary-blue)) !important;
         }
         
         /* Dark mode styles */
         body.dark-mode {
-            background-color: #1a1a1a;
-            color: #e9ecef;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #e2e8f0;
         }
         
         body.dark-mode .card {
-            background-color: #2d2d2d;
-            border-color: #404040;
+            background: rgba(30, 41, 59, 0.8);
+            border-color: #475569;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Modern card styling */
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.08);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.15);
         }
         
         /* Breadcrumb styles */
         .custom-breadcrumb {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-teal) 100%);
             color: white;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             margin-bottom: 2rem;
+            border-radius: 0 0 1rem 1rem;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.2);
         }
         
         .custom-breadcrumb .breadcrumb {
@@ -135,22 +186,38 @@
         /* Status indicators */
         .status-indicator {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             margin-right: 0.5rem;
+            animation: pulse 2s infinite;
         }
         
-        .status-online { background-color: #28a745; }
-        .status-warning { background-color: #ffc107; }
-        .status-offline { background-color: #dc3545; }
+        .status-online { 
+            background: linear-gradient(135deg, var(--accent-teal), var(--secondary-blue));
+            box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+        }
+        .status-warning { 
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+        .status-offline { 
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4" style="background: rgba(33, 37, 41, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+    <nav class="navbar navbar-expand-lg navbar-light mb-4" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08); border-bottom: 1px solid rgba(14, 165, 233, 0.1);">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-                <i class="fas fa-cube me-2"></i>{{ config('app.name', 'Inventory System') }}
+            <a class="navbar-brand fw-bold" href="{{ url('/') }}" style="color: #0ea5e9; font-size: 1.4rem;">
+                <i class="fas fa-cube me-2" style="color: #06b6d4;"></i>{{ config('app.name', 'Inventory System') }}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
