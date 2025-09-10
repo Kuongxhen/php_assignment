@@ -11,7 +11,7 @@
             "reorder_level": 5,
             "auto_reorder": true,
             "supplier": "Test Supplier",
-            "cost_price": 5.00,
+            "image_path": "/images/products/test-product-1.jpg",
             "unit": "tablets",
             "manufacturer": "Test Manufacturer",
             "is_active": true
@@ -27,7 +27,7 @@
             "reorder_level": 3,
             "auto_reorder": true,
             "supplier": "Test Supplier 2",
-            "cost_price": 8.00,
+            "image_path": "/images/products/test-product-2.jpg",
             "unit": "capsules",
             "manufacturer": "Test Manufacturer 2",
             "is_active": true

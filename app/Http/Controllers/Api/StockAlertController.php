@@ -224,7 +224,7 @@ class StockAlertController extends Controller
                             'reorder_level' => $product->reorder_level,
                             'suggested_quantity' => $suggestedQuantity,
                             'priority' => $priority,
-                            'estimated_cost' => ($product->cost_price ?? 0) * $suggestedQuantity,
+                            'estimated_cost' => ($product->cost ?? 0) * $suggestedQuantity,
                             'supplier' => $product->supplier,
                             'notes' => "Auto-generated reorder request due to low stock"
                         ]);

@@ -46,7 +46,7 @@ class ReorderRequestObserver implements StockObserverInterface
             'current_quantity' => $product->quantity,
             'reorder_level' => $product->reorder_level ?? 10,
             'suggested_quantity' => $suggestedQuantity,
-            'estimated_cost' => $suggestedQuantity * ($product->cost_price ?? $product->cost ?? 0),
+            'estimated_cost' => $suggestedQuantity * ($product->cost ?? 0),
             'priority' => $this->calculatePriority($product),
             'status' => 'pending',
             'request_type' => 'automatic',

@@ -23,7 +23,7 @@ class Product extends Model
         'reorder_level',
         'auto_reorder',
         'supplier',
-        'cost_price',
+        'image_path',
         'unit',
         'manufacturer',
         'expiration_date',
@@ -35,7 +35,6 @@ class Product extends Model
         'is_active' => 'boolean',
         'price' => 'decimal:2',
         'cost' => 'decimal:2',
-        'cost_price' => 'decimal:2',
         'expiration_date' => 'date',
     ];
 

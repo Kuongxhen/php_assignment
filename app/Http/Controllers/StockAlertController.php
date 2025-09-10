@@ -95,7 +95,7 @@ class StockAlertController extends Controller
     public function reorderRequests(Request $request): JsonResponse
     {
         $query = ReorderRequest::with(['product' => function($query) {
-            $query->select('product_id', 'name', 'sku', 'quantity', 'reorder_level', 'supplier', 'cost_price');
+            $query->select('product_id', 'name', 'sku', 'quantity', 'reorder_level', 'supplier', 'cost');
         }]);
 
         // Filter by status if provided
@@ -232,7 +232,7 @@ class StockAlertController extends Controller
                             'reorder_level' => $product->reorder_level,
                             'suggested_quantity' => $suggestedQuantity,
                             'priority' => $product->quantity <= 0 ? 'urgent' : 'medium',
-                            'estimated_cost' => $product->cost_price ? ($product->cost_price * $suggestedQuantity) : null,
+                            'estimated_cost' => $product->cost ? ($product->cost * $suggestedQuantity) : null,
                             'supplier' => $product->supplier
                         ]);
                         $reordersCreated++;

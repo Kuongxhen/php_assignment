@@ -14,7 +14,7 @@ class ReorderRequestController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = ReorderRequest::with('product:product_id,name,cost_price,cost');
+        $query = ReorderRequest::with('product:product_id,name,cost');
         
         // Filter by status if provided
         if ($request->has('status')) {

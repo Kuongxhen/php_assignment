@@ -970,8 +970,8 @@ function renderReorders(reorders) {
     }
 
     const reordersHtml = reorders.map(reorder => {
-        // Calculate estimated cost based on quantity and product cost price
-        const estimatedCost = (reorder.quantity || reorder.suggested_quantity || 50) * (reorder.product?.cost_price || 25);
+        // Calculate estimated cost based on quantity and product cost
+        const estimatedCost = (reorder.quantity || reorder.suggested_quantity || 50) * (reorder.product?.cost || 25);
         
         return `
             <div class="reorder-suggestion-item">
