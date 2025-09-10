@@ -7,13 +7,31 @@
         <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm">Back to Catalog</a>
     </div>
 
-    @if($product->image)
-        <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid mb-3" style="max-width: 300px;">
+    @if($product->image_path)
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <img src="{{ asset($product->image_path) }}" class="img-fluid rounded shadow" alt="{{ $product->name }}" style="max-width: 100%; height: auto;">
+            </div>
+            <div class="col-md-6">
+                <p class="text-muted">{{ $product->description }}</p>
+                <p><strong>SKU:</strong> {{ $product->sku }}</p>
+                <p><strong>Available Stock:</strong> {{ $product->quantity }}</p>
+            </div>
+        </div>
+    @else
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="bg-light rounded d-flex align-items-center justify-content-center shadow" style="height: 300px;">
+                    <i class="fas fa-image fa-4x text-muted"></i>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <p class="text-muted">{{ $product->description }}</p>
+                <p><strong>SKU:</strong> {{ $product->sku }}</p>
+                <p><strong>Available Stock:</strong> {{ $product->quantity }}</p>
+            </div>
+        </div>
     @endif
-
-    <p class="text-muted">{{ $product->description }}</p>
-    <p><strong>SKU:</strong> {{ $product->sku }}</p>
-    <p><strong>Available Stock:</strong> {{ $product->quantity }}</p>
 
     <hr>
     <div class="mb-3">

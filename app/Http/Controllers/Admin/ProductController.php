@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -42,7 +43,16 @@ class ProductController extends Controller
             'reorder_level' => 'nullable|integer|min:0',
             'unit' => 'nullable|string|max:50',
             'is_active' => 'nullable|boolean',
+            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('product_image')) {
+            $image = $request->file('product_image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('products', $imageName, 'public');
+            $data['image_path'] = 'storage/' . $imagePath;
+        }
 
         $this->productRepository->create($data);
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
@@ -69,7 +79,24 @@ class ProductController extends Controller
             'reorder_level' => 'nullable|integer|min:0',
             'unit' => 'nullable|string|max:50',
             'is_active' => 'nullable|boolean',
+            'product_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('product_image')) {
+            $product = $this->productRepository->find($id);
+            
+            // Delete old image if exists
+            if ($product->image_path && file_exists(public_path($product->image_path))) {
+                unlink(public_path($product->image_path));
+            }
+            
+            // Store new image
+            $image = $request->file('product_image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('products', $imageName, 'public');
+            $data['image_path'] = 'storage/' . $imagePath;
+        }
 
         $this->productRepository->update($id, $data);
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');

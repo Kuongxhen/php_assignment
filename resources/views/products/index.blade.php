@@ -8,8 +8,12 @@
         @forelse($products as $product)
         <div class="col-md-4 mb-3">
             <div class="card h-100 shadow-sm">
-                @if($product->image)
-                    <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}">
+                @if($product->image_path)
+                    <img src="{{ asset($product->image_path) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
+                @else
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
                 @endif
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title mb-2">{{ $product->name }}</h5>

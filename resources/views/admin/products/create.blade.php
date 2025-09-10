@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Create Product</h1>
-    <form method="POST" action="{{ route('admin.products.store') }}" class="mt-3">
+    <form method="POST" action="{{ route('admin.products.store') }}" class="mt-3" enctype="multipart/form-data">
         @csrf
         <div class="row g-3">
             <div class="col-md-4">
@@ -60,6 +60,12 @@
             <div class="col-md-3">
                 <label class="form-label">Unit</label>
                 <input name="unit" value="{{ old('unit', 'pcs') }}" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Product Image</label>
+                <input type="file" name="product_image" class="form-control" accept="image/*">
+                <div class="form-text">Upload product image (JPG, PNG, GIF). Max size: 2MB</div>
+                @error('product_image')<div class="text-danger small">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-3">
                 <label class="form-label">Active</label>

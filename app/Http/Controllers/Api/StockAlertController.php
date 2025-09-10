@@ -17,7 +17,7 @@ class StockAlertController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = StockAlert::with('product:product_id,name');
+        $query = StockAlert::with('product:product_id,name,image_path');
         
         // Filter by status if provided
         if ($request->has('status')) {
