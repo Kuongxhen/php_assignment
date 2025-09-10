@@ -901,7 +901,7 @@ function renderAlerts(alerts) {
     const alertsHtml = alerts.map(alert => `
         <div class="stock-alert-item">
             <div class="product-image">
-                <img src="${getProductImage(alert.product_name || 'default')}" 
+                <img src="${getProductImage(alert.product?.image_path || alert.product_name || 'default')}" 
                      alt="${alert.product_name || 'Product'}" 
                      onerror="this.src='https://via.placeholder.com/60x60/f8fafc/64748b?text=MD'">
             </div>
@@ -1021,9 +1021,22 @@ function renderReorders(reorders) {
     document.getElementById('reorders-container').innerHTML = reordersHtml;
 }
 
-function getProductImage(productName) {
-    // Use placeholder service for medical product images
+function getProductImage(imagePathOrName) {
+    // If it's a valid image path (starts with storage/ or http), use it directly
+    if (typeof imagePathOrName === 'string' && 
+        (imagePathOrName.startsWith('storage/') || imagePathOrName.startsWith('http'))) {
+        return imagePathOrName.startsWith('http') ? imagePathOrName : `/${imagePathOrName}`;
+    }
+    
+    // Fall back to placeholder images based on product name
+    const productName = imagePathOrName || 'default';
     const imageMap = {
+        'amoxicillin': '/storage/products/Amoxicillin.png',
+        'vitamin c': '/storage/products/Vitamin_C.png',
+        'vitamin e': '/storage/products/Vitamin_E.png',
+        'paracetamol': '/storage/products/Paracetamol.png',
+        'magnesium': '/storage/products/Magnesium.png',
+        'multivitamin': '/storage/products/Multivitamin.png',
         'surgical gloves': 'https://via.placeholder.com/60x60/f3f4f6/6b7280?text=SG',
         'antiseptic solution': 'https://via.placeholder.com/60x60/f3f4f6/6b7280?text=AS',
         'disposable syringes': 'https://via.placeholder.com/60x60/f3f4f6/6b7280?text=DS', 

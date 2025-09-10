@@ -15,6 +15,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Image</th>
                     <th>SKU</th>
                     <th>Name</th>
                     <th>Category</th>
@@ -29,6 +30,15 @@
                 @forelse($products as $product)
                 <tr>
                     <td>{{ $product->product_id }}</td>
+                    <td>
+                        @if($product->image_path)
+                            <img src="{{ asset($product->image_path) }}" alt="{{ $product->name }}" style="width: 40px; height: 40px; object-fit: cover;" class="rounded">
+                        @else
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fas fa-image text-muted"></i>
+                            </div>
+                        @endif
+                    </td>
                     <td>{{ $product->sku }}</td>
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->category }}</td>

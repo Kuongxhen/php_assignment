@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1>Edit Product</h1>
-    <form method="POST" action="{{ route('admin.products.update', $product->product_id) }}" class="mt-3">
+    <form method="POST" action="{{ route('admin.products.update', $product->product_id) }}" class="mt-3" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="row g-3">
@@ -60,6 +60,18 @@
             <div class="col-md-3">
                 <label class="form-label">Unit</label>
                 <input name="unit" value="{{ old('unit', $product->unit) }}" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Product Image</label>
+                <input type="file" name="product_image" class="form-control" accept="image/*">
+                <div class="form-text">Upload new product image (JPG, PNG, GIF). Max size: 2MB. Leave empty to keep current image.</div>
+                @if($product->image_path)
+                    <div class="mt-2">
+                        <small class="text-muted">Current image:</small><br>
+                        <img src="{{ asset($product->image_path) }}" alt="{{ $product->name }}" style="max-width: 100px; max-height: 100px; object-fit: cover;" class="border rounded">
+                    </div>
+                @endif
+                @error('product_image')<div class="text-danger small">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-3">
                 <label class="form-label">Active</label>
