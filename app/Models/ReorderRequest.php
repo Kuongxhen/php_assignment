@@ -187,9 +187,9 @@ class ReorderRequest extends Model
             return $value;
         }
         
-        // Calculate based on product cost_price and suggested quantity
+        // Calculate based on product cost and suggested quantity
         if ($this->product && $this->suggested_quantity) {
-            $unitCost = $this->product->cost_price ?? $this->product->cost ?? 0;
+            $unitCost = $this->product->cost ?? 0;
             return $unitCost * $this->suggested_quantity;
         }
         
