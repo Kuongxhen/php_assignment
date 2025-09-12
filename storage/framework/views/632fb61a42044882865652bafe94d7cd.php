@@ -1,0 +1,34 @@
+<?php $__env->startSection('content'); ?>
+<div class="container">
+    <h2 class="mb-4">Product Catalog</h2>
+
+    <div class="row">
+        <?php $__empty_1 = true; $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <?php if($product->image_path): ?>
+                    <img src="<?php echo e(asset($product->image_path)); ?>" class="card-img-top" alt="<?php echo e($product->name); ?>" style="height: 200px; object-fit: cover;">
+                <?php else: ?>
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                <?php endif; ?>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-2"><?php echo e($product->name); ?></h5>
+                    <p class="card-text text-muted mb-3"><?php echo e(Str::limit($product->description, 100)); ?></p>
+                    <p class="mt-auto mb-3"><strong>Price:</strong> RM <?php echo e(number_format($product->price, 2)); ?></p>
+                    <a href="<?php echo e(route('products.show', $product->product_id)); ?>" class="btn btn-primary btn-sm align-self-start">View Details</a>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+        <div class="col-12">
+            <div class="alert alert-info">No products available right now. Please check back later.</div>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Applications/XAMPP/xamppfiles/htdocs/myproject/resources/views/products/index.blade.php ENDPATH**/ ?>
