@@ -55,15 +55,31 @@ class ProductController extends Controller
         }
 
         $this->productRepository->create($data);
-        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
+        return redirect()->route('staffmod.admin.products')->with('success', 'Product created successfully.');
     }
 
+    /**
+     * Show the form for editing the specified product.
+     * 
+     * @param int $id The product ID
+     */
     public function edit($id)
     {
         $product = $this->productRepository->find($id);
+        
+        if (!$product) {
+            return redirect()->route('staffmod.admin.products')->with('error', 'Product not found.');
+        }
+        
         return view('admin.products.edit', compact('product'));
     }
 
+    /**
+     * Update the specified product in storage.
+     * 
+     * @param Request $request
+     * @param int $id The product ID
+     */
     public function update(Request $request, $id)
     {
         $data = $request->validate([
@@ -99,12 +115,21 @@ class ProductController extends Controller
         }
 
         $this->productRepository->update($id, $data);
-        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
+        return redirect()->route('staffmod.admin.products')->with('success', 'Product updated successfully.');
     }
 
+    /**
+     * Remove the specified product from storage.
+     * 
+     * @param int $id The product ID
+     */
     public function destroy($id)
     {
-        $this->productRepository->delete($id);
-        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
+        try {
+            $this->productRepository->delete($id);
+            return redirect()->route('staffmod.admin.products')->with('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('staffmod.admin.products')->with('error', 'Failed to delete product: ' . $e->getMessage());
+        }
     }
 }

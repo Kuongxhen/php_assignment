@@ -14,34 +14,24 @@ class ReorderRequest extends Model
         'current_quantity',
         'reorder_level',
         'suggested_quantity',
-        'actual_quantity',
-        'estimated_cost',
-        'actual_cost',
         'priority',
         'status',
-        'request_type',
+        'estimated_cost',
+        'supplier',
         'notes',
         'requested_by',
         'approved_by',
-        'supplier',
-        'purchase_order_number',
         'approved_at',
-        'ordered_at',
-        'received_at',
-        'expected_delivery_date'
+        'expected_delivery',
     ];
 
     protected $casts = [
         'current_quantity' => 'integer',
         'reorder_level' => 'integer',
         'suggested_quantity' => 'integer',
-        'actual_quantity' => 'integer',
         'estimated_cost' => 'decimal:2',
-        'actual_cost' => 'decimal:2',
         'approved_at' => 'datetime',
-        'ordered_at' => 'datetime',
-        'received_at' => 'datetime',
-        'expected_delivery_date' => 'date'
+        'expected_delivery' => 'datetime',
     ];
 
     /**

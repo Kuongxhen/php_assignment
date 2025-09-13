@@ -4,9 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PaymentController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\StockAlertController;
 use App\Http\Controllers\Api\ReorderRequestController;
+use App\Http\Controllers\Api\UserController;
+use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\Api\V1\PatientController;
+use App\Http\Controllers\Api\V1\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +22,65 @@ use App\Http\Controllers\Api\ReorderRequestController;
 |
 */
 
-// API version 1
+// From Michael and Marcus
+// Public authentication routes (no auth required)
+Route::prefix('v1/auth')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+// Protected API v1 routes group (require authentication)
+Route::prefix('v1')->middleware(['auth'])->group(function () {
+    
+    // Authentication routes (require auth)
+    Route::prefix('auth')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/profile', [AuthController::class, 'profile']);
+        Route::put('/profile', [AuthController::class, 'updateProfile']);
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
+        Route::delete('/account', [AuthController::class, 'deleteAccount']);
+        Route::get('/permissions', [AuthController::class, 'permissions']);
+    });
+    
+    // Patient API routes
+    Route::apiResource('patients', PatientController::class);
+    Route::get('/patients/search', [PatientController::class, 'search']);
+    Route::get('/patients/statistics', [PatientController::class, 'statistics']);
+    Route::patch('/patients/{patient}/status', [PatientController::class, 'updateStatus']);
+    Route::get('/patients/deletion-candidates', [PatientController::class, 'eligibleForDeletion']);
+    
+    // Patient Care API routes - Decorator Pattern Implementation
+    Route::prefix('patient-care')->group(function () {
+        // Care plan endpoints removed with decorator demo
+    });
+});
+
+// Role-based routes with middleware
+Route::prefix('v1')->middleware(['auth', 'role:admin'])->group(function () {
+    // Admin-only routes
+    Route::delete('/patients/{patient}/force-delete', [PatientController::class, 'forceDelete']);
+    Route::get('/system/statistics', function () {
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'users' => \App\Models\User::getStatistics(),
+                'patients' => \App\Models\Patient::getStatistics(),
+            ]
+        ]);
+    });
+});
+
+Route::prefix('v1')->middleware(['auth', 'role:doctor,admin'])->group(function () {
+    // Doctor and Admin only routes
+    Route::get('/reports/patients', [PatientController::class, 'reports']);
+});
+
+Route::prefix('v1')->middleware(['auth', 'role:staff,doctor,admin'])->group(function () {
+    // Staff, Doctor, and Admin routes
+    Route::get('/patients/all', [PatientController::class, 'index']);
+});
+
+// API version 1 KuongXhen part
 Route::prefix('v1')->group(function () {
     
     // Product API routes

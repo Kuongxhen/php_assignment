@@ -10,12 +10,12 @@ class StockAlert extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
-        'alert_type',
-        'message',
-        'current_quantity',
-        'reorder_level',
-        'status',
+        'product_id', 
+        'alert_type', 
+        'message', 
+        'current_quantity', 
+        'reorder_level', 
+        'status', 
         'severity',
         'acknowledged_by',
         'acknowledged_at',
